@@ -1,25 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addPost } from "./action";
 
-function App() {
+const App = () => {
+  const state = useSelector((state) => state);
+  // console.log("state", state);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(addPost());
+  }, [dispatch]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <button onClick={() => dispatch(addPost())}>hit Me</button>
+      <h1>{state.loading}</h1>
+      {!state.loading ? (
+        <div>
+          {state.items.map((item) => (
+            <h4 key={item.title}>{item.title}</h4>
+          ))}
+        </div>
+      ) : (
+        <h1> loading </h1>
+      )}
+      {state.error && JSON.stringify(state.error)}
     </div>
   );
-}
+};
 
 export default App;
